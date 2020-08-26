@@ -21,7 +21,7 @@ func main() {
 
 	cmsUrl := os.Getenv("CMS_URL")
 	if cmsUrl == "" {
-		cmsUrl = "http://localhost:5000"
+		cmsUrl = "http://localhost:1337"
 	}
 
 	showTmpl := template.Must(template.ParseFiles("templates/show.html"))

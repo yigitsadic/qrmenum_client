@@ -1,6 +1,6 @@
 package client
 
 type ProductResponse struct {
-	Name  string `json:"name"`
-	Price string `json:"price"`
+	Name  string  `json:"name"`
+	Price float32 `json:"price"`
 }

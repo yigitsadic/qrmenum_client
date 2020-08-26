@@ -19,10 +19,13 @@ func renderNotFoundResponse(w http.ResponseWriter, tmpl *template.Template) {
 	}
 }
 
+// Renders products.
 func renderProducts(w http.ResponseWriter, tmpl *template.Template, data []client.ProductResponse) {
 	w.WriteHeader(http.StatusOK)
 
-	err := tmpl.Execute(w, data)
+	err := tmpl.Execute(w, map[string][]client.ProductResponse{
+		"Products": data,
+	})
 	if err != nil {
 		_, _ = fmt.Fprintf(w, "Unable to write template")
 	}
@@ -50,7 +53,6 @@ func ProductHandler(s store.Store, mu *sync.Mutex, show *template.Template, notF
 				return
 			}
 
-			fmt.Println("aa")
 			s.SetMapItem(q, resp)
 
 			renderProducts(w, show, resp)

@@ -13,7 +13,7 @@ type ProductMapItem struct {
 
 // TODO: Implement is expired control.
 func (p *ProductMapItem) IsExpired() bool {
-	return p.LastAccess.Add(shared.ExpirationTime).After(time.Now())
+	return p.LastAccess.Add(shared.ExpirationTime).Before(time.Now())
 }
 
 type InMemoryStore struct {
