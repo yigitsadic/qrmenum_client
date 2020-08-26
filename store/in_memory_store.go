@@ -12,8 +12,8 @@ type ProductMapItem struct {
 }
 
 // TODO: Implement is expired control.
-func (p ProductMapItem) IsExpired() bool {
-	return false
+func (p *ProductMapItem) IsExpired() bool {
+	return p.LastAccess.Add(shared.ExpirationTime).After(time.Now())
 }
 
 type InMemoryStore struct {
@@ -46,5 +46,8 @@ func (i *InMemoryStore) GetMapItem(key string) (*ProductMapItem, error) {
 
 // Initializes a new in memory store.
 func NewInMemoryStore(client client.Client) *InMemoryStore {
-	return &InMemoryStore{Client: &client}
+	return &InMemoryStore{
+		Client:     &client,
+		ProductMap: make(map[string]ProductMapItem),
+	}
 }

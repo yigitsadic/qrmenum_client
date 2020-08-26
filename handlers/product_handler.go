@@ -30,8 +30,6 @@ func renderProducts(w http.ResponseWriter, tmpl *template.Template, data []clien
 
 func ProductHandler(s store.Store, mu *sync.Mutex, show *template.Template, notFound *template.Template) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// 1. Check if it's present on in memory store.
-
 		mu.Lock()
 		defer mu.Unlock()
 
@@ -52,6 +50,7 @@ func ProductHandler(s store.Store, mu *sync.Mutex, show *template.Template, notF
 				return
 			}
 
+			fmt.Println("aa")
 			s.SetMapItem(q, resp)
 
 			renderProducts(w, show, resp)
