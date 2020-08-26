@@ -1,1 +1,24 @@
 <h1>Show</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Ürün</th>
+            <th>Fiyat</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {{range .Products}}
+            <tr>
+                <td>
+                    {{.Name}}
+                </td>
+
+                <td>
+                    {{.Price}} ₺
+                </td>
+            </tr>
+        {{end}}
+    </tbody>
+</table>
