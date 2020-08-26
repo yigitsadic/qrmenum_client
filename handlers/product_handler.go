@@ -5,6 +5,7 @@ import (
 	"github.com/yigitsadic/qrmenum_client/client"
 	"github.com/yigitsadic/qrmenum_client/store"
 	"html/template"
+	"log"
 	"net/http"
 	"sync"
 )
@@ -40,20 +41,26 @@ func ProductHandler(s store.Store, mu *sync.Mutex, show *template.Template, notF
 		if q == "" {
 			// Return not found response if query param not present.
 
+			log.Println("q not found in request")
 			renderNotFoundResponse(w, notFound)
 			return
 		}
 
 		p, err := s.GetMapItem(q)
 		if err != nil {
+			log.Printf("Requested %q key not found in in-memory store\n", q)
+
 			c := s.GetClient()
 			resp, err := c.FetchFromCMS(q)
 			if err != nil {
+				log.Printf("Queried for %q in CMS, but found nothing\n", q)
+
 				renderNotFoundResponse(w, notFound)
 				return
 			}
 
 			s.SetMapItem(q, resp)
+			log.Printf("Fetched and assigned new content from CMS for %q\n", q)
 
 			renderProducts(w, show, resp)
 			return
@@ -62,20 +69,26 @@ func ProductHandler(s store.Store, mu *sync.Mutex, show *template.Template, notF
 		if p.IsExpired() {
 			// Re-fetch from CMS.
 
+			log.Printf("Given key %q is expired will re-fetch\n", q)
+
 			c := s.GetClient()
 			resp, err := c.FetchFromCMS(q)
 			if err != nil {
+				log.Printf("Tried to fetch %q from CMS but found nothing\n", q)
+
 				renderNotFoundResponse(w, notFound)
 				return
 			}
 
 			s.SetMapItem(q, resp)
+			log.Printf("Fetched and assigned new content from CMS for %q\n", q)
 
 			renderProducts(w, show, resp)
 			return
 		} else {
 			// Render products.
 
+			log.Printf("Found %q in in-memory store\n", q)
 			renderProducts(w, show, p.Products)
 			return
 		}

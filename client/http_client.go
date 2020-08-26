@@ -25,6 +25,10 @@ func (h HTTPClient) FetchFromCMS(key string) ([]ProductResponse, error) {
 		return nil, shared.UnableMarshalResponseFromCMS
 	}
 
+	if len(values) == 0 {
+		return nil, shared.KeyNotFoundOnCMS
+	}
+
 	return values, nil
 }
 
