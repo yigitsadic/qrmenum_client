@@ -78,6 +78,8 @@ func ProductHandler(s store.Store, mu *sync.Mutex, show *template.Template, notF
 			if err != nil {
 				log.Printf("Tried to fetch %q from CMS but found nothing\n", q)
 
+				s.SetMapItem(q, nil)
+
 				renderNotFoundResponse(w, notFound)
 				return
 			}
