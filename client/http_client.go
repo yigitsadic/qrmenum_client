@@ -12,7 +12,7 @@ type HTTPClient struct {
 }
 
 func (h HTTPClient) FetchFromCMS(key string) ([]ProductResponse, error) {
-	resp, err := http.Get(fmt.Sprintf("%s/products?company.id=%s", h.BaseUrl, key))
+	resp, err := http.Get(fmt.Sprintf("%s/products?company.label=%s", h.BaseUrl, key))
 
 	if err != nil {
 		return nil, shared.UnableToFetchFromCMS
